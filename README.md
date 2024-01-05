@@ -1,29 +1,49 @@
-# github-actions-workflow-template
+# git-tag-semver-workflow
 
-This repository is a template for creating reusable GitHub Actions Workflows. Go through the below checklist
-upon instantiating this template:
-- Rename and replace the content of [the placeholder](.github/workflows/reusable-workflow.yml) for your reusable workflow.
-- Edit this section and the usage section and replace with a meaningful description of your workflow
+This reusable workflow manages semantic versioning tags.
+See [here](https://github.com/infrastructure-blocks/git-tag-semver-action) for more information on the tagging behavior.
 
 ## Usage
 
+### On push without tag protection rules
 ```yaml
-name: Template Usage
+name: Git Tag Semver
 
 on:
   push: ~
 
-# This needs to be a superset of what your workflow requires
 permissions:
-  pull-requests: read
+  contents: write # Needed for pushing tags
+  pull-requests: write # Needed for pushing status reports as PR comments
 
 jobs:
-  example-job:
-    uses: infrastructure-blocks/github-actions-workflow-template/.github/workflows/reusable-workflow.yml@v1
+  git-tag-semver:
+    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/git-tag-semver.yml@v1
     with:
-      example-input: Nobody cares
+      version: patch
+```
+
+### On pull request with tag protection rules
+```yaml
+name: Git Tag Semver
+
+on:
+  pull_request: ~
+
+permissions:
+  # Note that we still require those privileges, even though we're not using the
+  # GITHUB_TOKEN to push the tags. Permissions are statically defined.
+  contents: write
+  pull-requests: write # Needed for pushing status reports as PR comments
+
+jobs:
+  git-tag-semver:
+    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/git-tag-semver.yml@v1
+    with:
+      version: patch
+      sha: ${{ github.event.pull_request.head.sha }}
     secrets:
-      example-secret: ${{ secrets.EXAMPLE }}
+      github-token: ${{ secrets.PAT }}
 ```
 
 ### Releasing

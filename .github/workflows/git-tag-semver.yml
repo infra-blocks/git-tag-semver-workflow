@@ -1,0 +1,81 @@
+name: Your Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        description: |
+          The semantic version bump to apply. One of "patch", "minor", or "major".
+        required: true
+      sha:
+        type: string
+        description: |
+          The commit SHA to tag. Defaults to the GITHUB_SHA. If the event triggering this workflow is a pull_request,
+          be sure to set this parameter to either github.event.pull_request.head.sha or github.event.pull_request.base.sha.
+          You probably don't want to tag the pull_request default SHA, which is on a merge branch.
+        required: false
+        default: ${{ github.sha }}
+    secrets:
+      github-token:
+        description: |
+          The GitHub token utilized to push the tags. If pushing a tag matching a protection rule,
+          this should be a PAT. Defaults to the GITHUB_TOKEN otherwise. Note that the workflow still utilizes
+          the GITHUB_TOKEN to post PR comments.
+        required: false
+    outputs:
+      tags:
+        description: The triplets of tags upserted.
+        value: ${{ jobs.git-tag-semver.outputs.tags }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  status-report-action-repository: infrastructure-blocks/git-tag-semver-workflow
+
+jobs:
+  git-tag-semver:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      tags: ${{ steps.git-tag.outputs.tags }}
+    steps:
+      - id: infer-variables
+        run: |
+          if test -n "${{ secrets.github-token }}"; then
+            echo "token=${{ secrets.github-token }}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "token=${{ github.token }}" >> "${GITHUB_OUTPUT}"
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.sha }}
+          token: ${{ steps.infer-variables.outputs.token }}
+      - id: git-tag
+        uses: infrastructure-blocks/git-tag-semver-action@v1
+        with:
+          version: ${{ inputs.version }}
+      - if: ${{ always() }}
+        id: get-current-pr
+        uses: 8BitJonny/gh-get-current-pr@2.2.0
+        with:
+          sha: ${{ inputs.sha }}
+      - if: ${{ steps.get-current-pr.outputs.pr_found == 'true' }}
+        uses: infrastructure-blocks/status-report-action@v1
+        with:
+          body: |
+            :rocket: **Success**: Commit ${{ inputs.sha }} tagged!
+            Tags:
+              - [${{ fromJson(steps.git-tag.outputs.tags)[0] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[0] }})
+              - [${{ fromJson(steps.git-tag.outputs.tags)[1] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[1] }})
+              - [${{ fromJson(steps.git-tag.outputs.tags)[2] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[2] }})
+      - if: ${{ failure() && steps.get-current-pr.outputs.pr_found == 'true' }}
+        uses: infrastructure-blocks/status-report-action@v1
+        with:
+          body: |
+            :boom: **Error**: Tagging sha ${{ inputs.sha }} with version bump `${{ inputs.version }}`
+            See [action logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }})
