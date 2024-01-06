@@ -1,4 +1,4 @@
-name: Your Reusable Workflow
+name: Git Tag Semver
 
 on:
   workflow_call:
@@ -67,6 +67,7 @@ jobs:
       - if: ${{ steps.get-current-pr.outputs.pr_found == 'true' }}
         uses: infrastructure-blocks/status-report-action@v1
         with:
+          issue-number: ${{ steps.get-current-pr.outputs.number }}
           body: |
             :rocket: **Success**: Commit ${{ inputs.sha }} tagged!
             Tags:
@@ -76,6 +77,7 @@ jobs:
       - if: ${{ failure() && steps.get-current-pr.outputs.pr_found == 'true' }}
         uses: infrastructure-blocks/status-report-action@v1
         with:
+          issue-number: ${{ steps.get-current-pr.outputs.number }}
           body: |
             :boom: **Error**: Tagging sha ${{ inputs.sha }} with version bump `${{ inputs.version }}`
             See [action logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }})
