@@ -10,22 +10,16 @@ on:
         required: true
       sha:
         type: string
-        description: |
-          The commit SHA to tag. Defaults to the GITHUB_SHA. If the event triggering this workflow is a pull_request,
-          be sure to set this parameter to either github.event.pull_request.head.sha or github.event.pull_request.base.sha.
-          You probably don't want to tag the pull_request default SHA, which is on a merge branch.
+        description: The commit SHA to tag.
         required: false
         default: ${{ github.sha }}
     secrets:
       github-token:
-        description: |
-          The GitHub token utilized to push the tags. If pushing a tag matching a protection rule,
-          this should be a PAT. Defaults to the GITHUB_TOKEN otherwise. Note that the workflow still utilizes
-          the GITHUB_TOKEN to post PR comments.
+        description: The GitHub token utilized to push the tags.
         required: false
     outputs:
       tags:
-        description: The triplets of tags upserted.
+        description: A stringified JSON array of the triplets of tags upserted.
         value: ${{ jobs.git-tag-semver.outputs.tags }}
 
 permissions:
