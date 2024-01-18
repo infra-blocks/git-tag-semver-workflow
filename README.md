@@ -33,6 +33,10 @@ See [here](https://github.com/infrastructure-blocks/git-tag-semver-action) for m
 
 N/A
 
+## Timeouts
+
+N/A
+
 ## Usage
 
 ### On push without tag protection rules
@@ -48,7 +52,7 @@ permissions:
 
 jobs:
   git-tag-semver:
-    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/git-tag-semver.yml@v1
+    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/workflow.yml@v1
     with:
       version: patch
 ```
@@ -68,7 +72,7 @@ permissions:
 
 jobs:
   git-tag-semver:
-    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/git-tag-semver.yml@v1
+    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/workflow.yml@v1
     with:
       version: patch
       sha: ${{ github.event.pull_request.head.sha }}
