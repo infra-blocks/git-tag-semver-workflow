@@ -1,4 +1,6 @@
 # git-tag-semver-workflow
+[![Git Tag Semver From Label](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/git-tag-semver-from-label.yml/badge.svg)](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/git-tag-semver-from-label.yml)
+[![Update From Template](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/update-from-template.yml/badge.svg)](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/update-from-template.yml)
 
 This reusable workflow manages semantic versioning tags.
 See [here](https://github.com/infrastructure-blocks/git-tag-semver-action) for more information on the tagging behavior.
