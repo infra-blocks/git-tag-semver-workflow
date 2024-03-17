@@ -5,6 +5,9 @@
 This reusable workflow manages semantic versioning tags.
 See [here](https://github.com/infrastructure-blocks/git-tag-semver-action) for more information on the tagging behavior.
 
+The status of this action is reported as a PR comment using [this action](https://github.com/infrastructure-blocks/status-report-action)
+when a matching PR is found for the provided SHA.
+
 ## Inputs
 
 |  Name   | Required | Description                                                                                                                                                                                                                                                                                                                                 |
@@ -29,7 +32,7 @@ See [here](https://github.com/infrastructure-blocks/git-tag-semver-action) for m
 |     Scope     | Level | Reason                                        |
 |:-------------:|:-----:|-----------------------------------------------|
 |   contents    | write | To potentially push tags with this token.     |
-| pull-requests | write | TO post status report updates as PR comments. |
+| pull-requests | write | To post status report updates as PR comments. |
 
 ## Concurrency controls
 
