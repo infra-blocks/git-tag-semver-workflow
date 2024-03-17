@@ -55,10 +55,11 @@ jobs:
           version: ${{ inputs.version }}
       - if: ${{ always() }}
         id: get-current-pr
-        uses: 8BitJonny/gh-get-current-pr@2.2.0
+        uses: infrastructure-blocks/get-current-pull-request-action@v1
+        continue-on-error: true
         with:
           sha: ${{ inputs.sha }}
-      - if: ${{ steps.get-current-pr.outputs.pr_found == 'true' }}
+      - if: ${{ steps.get-current-pr.outputs.id != '' }}
         uses: infrastructure-blocks/status-report-action@v1
         with:
           issue-number: ${{ steps.get-current-pr.outputs.number }}
@@ -68,7 +69,7 @@ jobs:
               - [${{ fromJson(steps.git-tag.outputs.tags)[0] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[0] }})
               - [${{ fromJson(steps.git-tag.outputs.tags)[1] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[1] }})
               - [${{ fromJson(steps.git-tag.outputs.tags)[2] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[2] }})
-      - if: ${{ failure() && steps.get-current-pr.outputs.pr_found == 'true' }}
+      - if: ${{ failure() && steps.get-current-pr.outputs.id != '' }}
         uses: infrastructure-blocks/status-report-action@v1
         with:
           issue-number: ${{ steps.get-current-pr.outputs.number }}
