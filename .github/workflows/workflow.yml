@@ -13,6 +13,11 @@ on:
         description: The commit SHA to tag.
         required: false
         default: ${{ github.sha }}
+      skip:
+        type: boolean
+        description: Whether to skip the workflow or not.
+        required: false
+        default: false
     secrets:
       github-token:
         description: The GitHub token utilized to push the tags.
@@ -31,6 +36,7 @@ env:
 
 jobs:
   git-tag-semver:
+    if: ${{ !inputs.skip }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -38,7 +44,7 @@ jobs:
     outputs:
       tags: ${{ steps.git-tag.outputs.tags }}
     steps:
-      - id: infer-variables
+      - id: variables
         run: |
           if test -n "${{ secrets.github-token }}"; then
             echo "token=${{ secrets.github-token }}" >> "${GITHUB_OUTPUT}"
@@ -48,7 +54,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.sha }}
-          token: ${{ steps.infer-variables.outputs.token }}
+          token: ${{ steps.variables.outputs.token }}
       - id: git-tag
         uses: infrastructure-blocks/git-tag-semver-action@v1
         with:

@@ -14,6 +14,7 @@ when a matching PR is found for the provided SHA.
 |:-------:|:--------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | version |   true   | The semantic version bump to apply. One of "patch", "minor", or "major".                                                                                                                                                                                                                                                                    |
 |   sha   |  false   | The commit SHA to tag. Defaults to the ${{ github.sha }}. If the event triggering this workflow is a pull_request, be sure to set this parameter to either ${{ github.event.pull_request.head.sha }} or ${{ github.event.pull_request.base.sha }}. You probably don't want to tag the pull_request default SHA, which is on a merge branch. |
+|  skip   |  false   | A boolean indicating whether to skip the workflow. This is to workaround the required checks discrepancy when the workflow is skipped from the caller. It defaults to false.                                                                                                                                                                |
 
 ## Secrets
 
