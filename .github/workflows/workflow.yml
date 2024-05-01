@@ -35,8 +35,12 @@ env:
   status-report-action-repository: infrastructure-blocks/git-tag-semver-workflow
 
 jobs:
+<<<<<<< HEAD
   git-tag-semver:
     if: ${{ !inputs.skip }}
+=======
+  example-job:
+>>>>>>> template/master
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -44,7 +48,16 @@ jobs:
     outputs:
       tags: ${{ steps.git-tag.outputs.tags }}
     steps:
+<<<<<<< HEAD
       - id: variables
+=======
+      # This condition should be on every step.
+      - if: ${{ !inputs.skip }}
+        id: example-step
+        name: Example step
+        env:
+          BIG_SECRET: ${{ secrets.example-secret }}
+>>>>>>> template/master
         run: |
           if test -n "${{ secrets.github-token }}"; then
             echo "token=${{ secrets.github-token }}" >> "${GITHUB_OUTPUT}"
