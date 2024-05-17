@@ -32,7 +32,7 @@ permissions:
   pull-requests: write
 
 env:
-  status-report-action-repository: infrastructure-blocks/git-tag-semver-workflow
+  status-report-action-repository: infra-blocks/git-tag-semver-workflow
 
 jobs:
   git-tag-semver:
@@ -58,17 +58,17 @@ jobs:
           token: ${{ steps.variables.outputs.token }}
       - if: ${{ !inputs.skip }}
         id: git-tag
-        uses: infrastructure-blocks/git-tag-semver-action@v1
+        uses: infra-blocks/git-tag-semver-action@v1
         with:
           version: ${{ inputs.version }}
       - if: ${{ !inputs.skip && always()  }}
         id: get-current-pr
-        uses: infrastructure-blocks/get-current-pull-request-action@v1
+        uses: infra-blocks/get-current-pull-request-action@v1
         continue-on-error: true
         with:
           sha: ${{ inputs.sha }}
       - if: ${{ !inputs.skip && steps.get-current-pr.outputs.id != '' }}
-        uses: infrastructure-blocks/status-report-action@v1
+        uses: infra-blocks/status-report-action@v1
         with:
           issue-number: ${{ steps.get-current-pr.outputs.number }}
           body: |
@@ -78,7 +78,7 @@ jobs:
               - [${{ fromJson(steps.git-tag.outputs.tags)[1] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[1] }})
               - [${{ fromJson(steps.git-tag.outputs.tags)[2] }}](https://github.com/${{ github.repository }}/releases/tag/${{ fromJson(steps.git-tag.outputs.tags)[2] }})
       - if: ${{ !inputs.skip && failure() && steps.get-current-pr.outputs.id != '' }}
-        uses: infrastructure-blocks/status-report-action@v1
+        uses: infra-blocks/status-report-action@v1
         with:
           issue-number: ${{ steps.get-current-pr.outputs.number }}
           body: |

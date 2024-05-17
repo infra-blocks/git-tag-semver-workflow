@@ -1,11 +1,11 @@
 # git-tag-semver-workflow
-[![Release](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/release.yml/badge.svg)](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/release.yml)
-[![Update From Template](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/update-from-template.yml/badge.svg)](https://github.com/infrastructure-blocks/git-tag-semver-workflow/actions/workflows/update-from-template.yml)
+[![Release](https://github.com/infra-blocks/git-tag-semver-workflow/actions/workflows/release.yml/badge.svg)](https://github.com/infra-blocks/git-tag-semver-workflow/actions/workflows/release.yml)
+[![Update From Template](https://github.com/infra-blocks/git-tag-semver-workflow/actions/workflows/update-from-template.yml/badge.svg)](https://github.com/infra-blocks/git-tag-semver-workflow/actions/workflows/update-from-template.yml)
 
 This reusable workflow manages semantic versioning tags.
-See [here](https://github.com/infrastructure-blocks/git-tag-semver-action) for more information on the tagging behavior.
+See [here](https://github.com/infra-blocks/git-tag-semver-action) for more information on the tagging behavior.
 
-The status of this action is reported as a PR comment using [this action](https://github.com/infrastructure-blocks/status-report-action)
+The status of this action is reported as a PR comment using [this action](https://github.com/infra-blocks/status-report-action)
 when a matching PR is found for the provided SHA.
 
 ## Inputs
@@ -58,7 +58,7 @@ permissions:
 
 jobs:
   git-tag-semver:
-    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/workflow.yml@v1
+    uses: infra-blocks/git-tag-semver-workflow/.github/workflows/workflow.yml@v1
     with:
       version: patch
 ```
@@ -78,7 +78,7 @@ permissions:
 
 jobs:
   git-tag-semver:
-    uses: infrastructure-blocks/git-tag-semver-workflow/.github/workflows/workflow.yml@v1
+    uses: infra-blocks/git-tag-semver-workflow/.github/workflows/workflow.yml@v1
     with:
       version: patch
       sha: ${{ github.event.pull_request.head.sha }}
@@ -89,4 +89,4 @@ jobs:
 ### Releasing
 
 The releasing is handled at git level with semantic versioning tags. Those are automatically generated and managed
-by the [git-tag-semver-from-label-workflow](https://github.com/infrastructure-blocks/git-tag-semver-from-label-workflow).
+by the [git-tag-semver-from-label-workflow](https://github.com/infra-blocks/git-tag-semver-from-label-workflow).
